@@ -1,7 +1,7 @@
 # S82RedeemCode — Hệ Thống Đổi Mã Quà Tặng
 
-Script FiveM đa framework (ESX / QB / QBX) cho phép người chơi đổi **mã quà tặng**
-lấy tiền và/hoặc vật phẩm, đi kèm bảng quản lý (admin panel) đầy đủ chức năng
+Framework (ESX / QB / QBX) cho phép người chơi đổi **mã quà tặng**
+lấy tiền và / hoặc vật phẩm, đi kèm bảng quản lý (admin panel) đầy đủ chức năng
 ngay trong game.
 
 ## Tính năng chính
@@ -18,7 +18,6 @@ ngay trong game.
 
 - Framework: ESX, QB hoặc QBX (hoặc bản fork tương thích)
 - MySQL: `oxmysql`, `mysql-async` hoặc `ghmattimysql` (tự nhận diện)
-- `lua54 'yes'` (đã bật sẵn trong `fxmanifest.lua`)
 
 ## Cài đặt nhanh
 
@@ -27,7 +26,7 @@ ngay trong game.
 
 ```cfg
 ensure oxmysql      # hoặc mysql-async / ghmattimysql
-ensure s82_redeemcode
+ensure redeemcode
 ```
 
 4. Khởi động lại server — bảng dữ liệu sẽ tự động được tạo.

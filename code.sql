@@ -1,6 +1,5 @@
 -- ─────────────────────────────────────────────────────────────────────────────
--- s82 · SQL schema
--- Import this file into your database if autoCreateTables is disabled.
+-- Nhập tệp này vào cơ sở dữ liệu của bạn nếu autoCreateTables bị tắt.
 -- ─────────────────────────────────────────────────────────────────────────────
 
 CREATE TABLE IF NOT EXISTS `s82_codes` (
