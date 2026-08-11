@@ -4,7 +4,7 @@ game 'gta5'
 name 's82_redeemcode'
 author 'S82Studio'
 description 'Hệ thống mã đổi quà nâng cao - Đa khung'
-version '1.0.0'
+version '1.0.1'
 
 shared_scripts {
     'config/config.lua',
