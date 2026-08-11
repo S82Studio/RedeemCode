@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redeem Code</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" integrity="sha384-RkASv+6KfBMW9eknReJIJ6b3UnjKOKC5bOUaNgIY778NFbQ8MtWq9Lr/khUgqtTt" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js" integrity="sha384-5JqMv4L/Xa0hfvtF06qboNdhvuYXUku9ZrhZh3bSk8VXF0A/RuSLHpLsSV9Zqhl6" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/pl.js" integrity="sha384-W0DNcxEk6/n5JfjgytuutdTkGD5dFcAQOqDuhxNIi3obt6P07XYspdjhAFJAA5f9" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <div id="redeem-panel" class="hidden">
+        <div class="redeem-card">
+            <div class="redeem-card-glow"></div>
+
+            <button id="redeem-close-btn" class="redeem-close-btn" title="Close (ESC)" data-locale-title="redeem_close">
+                <i class="fas fa-xmark"></i>
+            </button>
+
+            <div class="redeem-header">
+                <div class="redeem-icon-wrapper">
+                    <i class="fas fa-spa"></i>
+                    <div class="redeem-icon-ring"></div>
+                </div>
+                <h1 data-locale="redeem_title">Redeem Code</h1>
+                <p class="redeem-subtitle" data-locale="redeem_subtitle">Enter your code below to claim your rewards</p>
+            </div>
+
+            <div class="redeem-body">
+                <div class="input-group">
+                    <input
+                        type="text"
+                        id="code-input"
+                        class="code-input"
+                        data-locale-placeholder="redeem_placeholder"
+                        placeholder="Enter your code..."
+                        autocomplete="off"
+                        spellcheck="false"
+                    />
+                    <div class="input-glow"></div>
+                </div>
+
+                <button id="redeem-btn" class="redeem-btn" data-locale="redeem_button">
+                    <i class="fas fa-unlock-keyhole"></i>
+                    <span>Redeem</span>
+                </button>
+
+                <div id="status-msg" class="status-msg"></div>
+
+                <div id="rewards-list" class="hidden"></div>
+            </div>
+
+            <div class="redeem-footer">
+                <span class="esc-hint"><kbd>ESC</kbd> <span data-locale="esc_to_close">to close</span></span>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-panel" class="hidden">
+        <div class="admin-container">
+
+            <aside class="admin-side">
+                <div class="side-app">
+                    <div class="side-app-icon"><i class="fas fa-spa"></i></div>
+                    <div class="side-app-meta">
+                        <span class="side-app-name" data-locale="admin_title">Code Manager</span>
+                    </div>
+                </div>
+
+                <nav class="side-nav">
+                    <button class="admin-tab-btn active" data-tab="create">
+                        <span class="side-tile tile-blue"><i class="fas fa-plus"></i></span>
+                        <span class="side-label" data-locale="admin_tab_create">Create Code</span>
+                    </button>
+                    <button class="admin-tab-btn" data-tab="active">
+                        <span class="side-tile tile-green"><i class="fas fa-list-check"></i></span>
+                        <span class="side-label" data-locale="admin_tab_active">Active Codes</span>
+                    </button>
+                    <button class="admin-tab-btn" data-tab="history">
+                        <span class="side-tile tile-gray"><i class="fas fa-clock-rotate-left"></i></span>
+                        <span class="side-label" data-locale="admin_tab_history">History</span>
+                    </button>
+                </nav>
+
+                <div class="side-foot">
+                    <kbd>ESC</kbd>
+                    <span data-locale="esc_to_close">to close</span>
+                </div>
+            </aside>
+
+            <main class="admin-main">
+                <button id="admin-close-btn" class="admin-close-btn" title="Close (ESC)" data-locale-title="redeem_close">
+                    <i class="fas fa-xmark"></i>
+                </button>
+
+                <div id="tab-create" class="admin-tab-content">
+                    <header class="content-head">
+                        <h2 data-locale="admin_tab_create">Create Code</h2>
+                    </header>
+
+                    <div class="form-stack">
+
+                        <section class="form-card">
+                            <div class="frow">
+                                <div class="frow-label">
+                                    <i class="fas fa-key"></i>
+                                    <span data-locale="admin_code_label">Code</span>
+                                </div>
+                                <div class="frow-control control-code">
+                                    <input type="text" id="admin-code-input" class="field code-font" placeholder="XXXX-XXXX-XXXX" data-locale-placeholder="admin_code_placeholder" autocomplete="off" spellcheck="false" />
+                                    <button id="generate-code-btn" class="icon-btn" title="Auto-generate code" data-locale-title="admin_generate">
+                                        <i class="fas fa-shuffle"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="frow">
+                                <div class="frow-label">
+                                    <i class="fas fa-trophy"></i>
+                                    <span data-locale="admin_reward_type">Reward Type</span>
+                                </div>
+                                <div class="frow-control">
+                                    <div class="seg">
+                                        <button class="reward-type-btn active" data-type="money">
+                                            <i class="fas fa-dollar-sign"></i>
+                                            <span data-locale="admin_reward_money">Money</span>
+                                        </button>
+                                        <button class="reward-type-btn" data-type="item">
+                                            <i class="fas fa-box-open"></i>
+                                            <span data-locale="admin_reward_item">Item</span>
+                                        </button>
+                                        <button class="reward-type-btn" data-type="both">
+                                            <i class="fas fa-layer-group"></i>
+                                            <span data-locale="admin_reward_both">Both</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="money-section" class="frow frow-stack">
+                                <div class="frow-top">
+                                    <div class="frow-label">
+                                        <i class="fas fa-coins"></i>
+                                        <div class="lbl-stack">
+                                            <span data-locale="admin_money_accounts">Money</span>
+                                            <small data-locale="admin_money_accounts_hint">enter amounts per account</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="money-accounts" class="money-accounts"></div>
+                            </div>
+
+                            <div id="items-section" class="frow frow-stack hidden">
+                                <div class="frow-top">
+                                    <div class="frow-label">
+                                        <i class="fas fa-boxes-stacked"></i>
+                                        <span data-locale="admin_reward_item">Items</span>
+                                    </div>
+                                    <button id="view-items-list-btn" class="link-btn" type="button" title="View all items list" data-locale-title="btn_view_full_list">
+                                        <i class="fas fa-list-ul"></i> <span data-locale="btn_view_full_list">View Full List</span>
+                                    </button>
+                                </div>
+                                <div class="items-composer">
+                                    <div class="input-autocomplete-wrapper">
+                                        <input type="text" id="item-name-input" class="field" placeholder="Item name..." data-locale-placeholder="admin_item_name_placeholder" autocomplete="off" spellcheck="false" />
+                                        <div id="item-search-dropdown" class="search-dropdown hidden"></div>
+                                    </div>
+                                    <input type="number" id="item-amount-input" class="field qty" placeholder="Qty" data-locale-placeholder="admin_qty_placeholder" value="1" min="1" />
+                                    <button id="add-item-btn" class="icon-btn accent" title="Add item" data-locale-title="admin_add_item">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div id="reward-items-list"></div>
+                            </div>
+                        </section>
+
+                        <section class="form-card">
+                            <div class="frow">
+                                <div class="frow-label">
+                                    <i class="fas fa-users"></i>
+                                    <div class="lbl-stack">
+                                        <span data-locale="admin_max_uses">Max Uses</span>
+                                        <small data-locale="admin_max_uses_hint">0 = unlimited</small>
+                                    </div>
+                                </div>
+                                <div class="frow-control">
+                                    <input type="number" id="max-uses-input" class="field field-num" value="0" min="0" />
+                                </div>
+                            </div>
+
+                            <div class="frow">
+                                <div class="frow-label">
+                                    <i class="fas fa-calendar-days"></i>
+                                    <div class="lbl-stack">
+                                        <span data-locale="admin_expiry">Expiry Date</span>
+                                        <small data-locale="admin_expiry_hint">optional</small>
+                                    </div>
+                                </div>
+                                <div class="frow-control">
+                                    <input type="text" id="expiry-input" class="field field-date" placeholder="YYYY-MM-DD HH:MM" />
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="form-card">
+                            <div class="frow">
+                                <div class="frow-label">
+                                    <i class="fas fa-lock"></i>
+                                    <span data-locale="admin_private">Private Code</span>
+                                </div>
+                                <div class="frow-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="private-toggle" />
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div id="private-target" class="frow frow-stack hidden">
+                                <div class="frow-top">
+                                    <div class="frow-label">
+                                        <i class="fas fa-id-badge"></i>
+                                        <span data-locale="admin_target_citizens">Target Citizen IDs</span>
+                                    </div>
+                                    <button id="pick-player-btn" class="link-btn" type="button" title="Choose from online players" data-locale-title="btn_pick_player">
+                                        <i class="fas fa-users"></i> <span data-locale="btn_pick_player">Choose from list</span>
+                                    </button>
+                                </div>
+                                <div class="target-composer">
+                                    <input type="text" id="target-citizenid-input" class="field code-font" placeholder="ABC12345" data-locale-placeholder="admin_target_placeholder" autocomplete="off" spellcheck="false" />
+                                    <button id="add-target-btn" class="icon-btn accent" type="button" title="Add target" data-locale-title="admin_add_target">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div id="target-list" class="target-list"></div>
+                            </div>
+                        </section>
+
+                        <div class="form-actions">
+                            <button id="cancel-edit-btn" class="ghost-btn hidden" type="button">
+                                <i class="fas fa-xmark"></i>
+                                <span data-locale="btn_cancel_edit">Cancel Edit</span>
+                            </button>
+                            <button id="create-code-btn" class="primary-btn">
+                                <i class="fas fa-wand-magic-sparkles"></i>
+                                <span data-locale="admin_create_btn">Create Code</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="tab-active" class="admin-tab-content hidden">
+                    <header class="content-head">
+                        <h2 data-locale="admin_tab_active">Active Codes</h2>
+                        <div class="head-tools">
+                            <div class="search-field">
+                                <i class="fas fa-magnifying-glass"></i>
+                                <input type="text" id="active-codes-search" data-locale-placeholder="admin_active_codes_search_placeholder" placeholder="Search codes..." autocomplete="off" spellcheck="false" />
+                            </div>
+                        </div>
+                    </header>
+
+                    <div class="table-card">
+                        <div class="table-wrapper">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th data-locale="admin_col_code">Code</th>
+                                        <th data-locale="admin_col_type">Type</th>
+                                        <th data-locale="admin_col_rewards">Rewards</th>
+                                        <th data-locale="admin_col_uses">Uses</th>
+                                        <th data-locale="admin_col_expiry">Expiry</th>
+                                        <th data-locale="admin_col_scope">Scope</th>
+                                        <th data-locale="admin_col_creator">Creator</th>
+                                        <th data-locale="admin_col_actions">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="active-codes-body"></tbody>
+                            </table>
+                        </div>
+                        <div id="active-codes-empty" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p data-locale="admin_no_codes">No active codes found</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-history" class="admin-tab-content hidden">
+                    <header class="content-head">
+                        <h2 data-locale="admin_tab_history">History</h2>
+                        <div class="head-tools">
+                            <div class="search-field">
+                                <i class="fas fa-magnifying-glass"></i>
+                                <input type="text" id="history-search" data-locale-placeholder="admin_history_search_placeholder" placeholder="Search logs..." autocomplete="off" spellcheck="false" />
+                            </div>
+                            <button id="clear-history-btn" class="clear-history-btn" type="button">
+                                <i class="fas fa-trash-can"></i>
+                                <span data-locale="admin_btn_clear_history">Clear History</span>
+                            </button>
+                        </div>
+                    </header>
+
+                    <div class="table-card">
+                        <div class="table-wrapper">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th data-locale="admin_col_code">Code</th>
+                                        <th data-locale="admin_col_redeemed_by">Redeemed By</th>
+                                        <th data-locale="admin_col_date">Date</th>
+                                        <th data-locale="admin_col_rewards">Rewards</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-body"></tbody>
+                            </table>
+                        </div>
+                        <div id="history-empty" class="empty-state">
+                            <i class="fas fa-clock-rotate-left"></i>
+                            <p data-locale="admin_no_history">No redemption history found</p>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <div id="items-modal" class="admin-modal hidden">
+                <div class="admin-modal-content">
+                    <div class="admin-modal-header">
+                        <div class="admin-modal-title">
+                            <i class="fas fa-boxes-stacked"></i>
+                            <span data-locale="modal_items_title">All Server Items</span>
+                        </div>
+                        <button id="items-modal-close-btn" class="admin-modal-close-btn" type="button" title="Close" data-locale-title="redeem_close">
+                            <i class="fas fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <div class="admin-modal-body">
+                        <div class="modal-controls-row">
+                            <div class="search-field">
+                                <i class="fas fa-magnifying-glass"></i>
+                                <input type="text" id="modal-item-search" placeholder="Search items..." data-locale-placeholder="modal_items_search_placeholder" autocomplete="off" spellcheck="false" />
+                            </div>
+                            <div class="modal-sort-group">
+                                <select id="modal-item-sort" class="modal-sort-select">
+                                    <option value="label-asc" selected data-locale="sort_label_asc">Label (A-Z)</option>
+                                    <option value="label-desc" data-locale="sort_label_desc">Label (Z-A)</option>
+                                    <option value="name-asc" data-locale="sort_name_asc">ID (A-Z)</option>
+                                    <option value="name-desc" data-locale="sort_name_desc">ID (Z-A)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="modal-items-grid" class="modal-items-grid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="players-modal" class="admin-modal hidden">
+                <div class="admin-modal-content">
+                    <div class="admin-modal-header">
+                        <div class="admin-modal-title">
+                            <i class="fas fa-users"></i>
+                            <span data-locale="modal_players_title">Online Players</span>
+                        </div>
+                        <button id="players-modal-close-btn" class="admin-modal-close-btn" type="button" title="Close" data-locale-title="redeem_close">
+                            <i class="fas fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <div class="admin-modal-body">
+                        <div class="modal-controls-row">
+                            <div class="search-field">
+                                <i class="fas fa-magnifying-glass"></i>
+                                <input type="text" id="modal-player-search" placeholder="Search by ID, name, Steam HEX..." data-locale-placeholder="modal_players_search_placeholder" autocomplete="off" spellcheck="false" />
+                            </div>
+                        </div>
+
+                        <div id="modal-players-list" class="modal-players-list"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="debug.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
