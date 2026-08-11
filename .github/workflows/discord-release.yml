@@ -1,8 +1,9 @@
 name: Discord Release Notification
 
-on:
+'on':
   release:
-    types: [published]
+    types:
+      - published
 
 jobs:
   notify-discord:
@@ -18,11 +19,13 @@ jobs:
           RELEASE_BODY: ${{ github.event.release.body }}
           AUTHOR_NAME: ${{ github.event.release.author.login }}
           REPOSITORY: ${{ github.repository }}
+
         run: |
           python3 - <<'PY'
           import json
           import os
           import urllib.request
+          from datetime import datetime, timezone
 
           webhook = os.environ["DISCORD_WEBHOOK"]
 
@@ -33,7 +36,6 @@ jobs:
           author = os.environ.get("AUTHOR_NAME") or "Unknown"
           repository = os.environ.get("REPOSITORY") or "S82Studio/RedeemCode"
 
-          # Giới hạn changelog để Discord không vượt quá giới hạn Embed
           if len(release_body) > 3500:
               release_body = release_body[:3500] + "\n..."
 
@@ -46,6 +48,7 @@ jobs:
                       "description": "A new version of **RedeemCode** is now available!",
                       "url": release_url,
                       "color": 5814783,
+
                       "fields": [
                           {
                               "name": "✨ What's New",
@@ -68,12 +71,12 @@ jobs:
                               "inline": False
                           }
                       ],
+
                       "footer": {
                           "text": "S82Studio • RedeemCode"
                       },
-                      "timestamp": __import__("datetime").datetime.now(
-                          __import__("datetime").timezone.utc
-                      ).isoformat()
+
+                      "timestamp": datetime.now(timezone.utc).isoformat()
                   }
               ]
           }
