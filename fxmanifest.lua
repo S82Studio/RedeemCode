@@ -1,5 +1,6 @@
 fx_version 'cerulean'
 game 'gta5'
+lua54 'yes'
 
 name 's82_redeemcode'
 author 'S82Studio'
@@ -51,4 +52,4 @@ files {
     'html/fonts/*.ttf',
 }
 
-lua54 'yes'
+
